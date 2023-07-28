@@ -1,0 +1,11 @@
+FROM python:3.6
+
+# Copy the cracking code into the container
+COPY crack_bcrypt_Seq.py /crack_final/
+
+# Set the working directory
+WORKDIR /crack_final
+
+# Install dependencies
+RUN pip3 install bcrypt
+
