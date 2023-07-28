@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>. : I M P A L A : .</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #112240;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      max-width: 620px;
+      width: 100%;
+      margin-top: 500px;
+      background-color: #162d53;
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+    }
+
+    h1 {
+      color: #FF0000;
+      margin-bottom: 20px;
+      font-size: 80px;
+    }
+
+    p {
+      font-weight: bold;
+      margin-bottom: 25px;
+      font-size: 22px;
+      color: #ffffff;
+    }
+
+    form {
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      background-color: #1f3e73;
+      padding: 20px;
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 4px;
+      background-color: #eef3fa;
+      font-size: 16px;
+    }
+
+    form input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    form input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .output {
+      margin-top: 30px;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 45px;
+      max-width: 600px;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #cedbf2;
+      color: #008000;
+      font-family: "Courier New", monospace;
+      white-space: pre-wrap;
+      line-height: 2.2;
+      font-size: 15px;
+      font-weight: bold;
+    }
+    /* Remove the default padding for the <pre> element */
+    pre {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>. : I M P A L A : .</h1>
+    <form id="crackForm">
+      <p><strong>Test your password below!</strong></p>
+      <label for="targetHash">Target Hash to Crack:</label>
+      <input type="text" id="targetHash" name="targetHash" title="Enter the target hash (e.g., '$2a$10$vsXjUPcQT.nJkV5cOjFAguWx5F4GZ895epQbotLUdrgqmxm4CdLj2')" required><br>
+
+      <label for="mode">Search Mode:</label>
+      <select id="mode" name="mode" title="Select the search mode: 'parallel' for each thread to search the wordlist in different positions or 'sequential' for all the threads to search the wordlist starting from the beginning until the end" required>
+        <option value="PL">Parallel</option>
+        <option value="Seq">Sequential</option>
+      </select><br>
+
+      <label for="numProcessesThreads">Number of Threads (Optional):</label>
+      <input type="number" id="numProcessesThreads" name="numProcessesThreads" title="Specify the number of threads to handle the wordlist (e.g., '12')" placeholder="10"><br>
+
+      <label for="wordlistFilename">Wordlist name:</label>
+      <select id="wordlistFilename" name="wordlistFilename" title="Specify the wordlist filename (e.g., 'John.txt' or 'rockyou.txt') to search for the password" required>
+        <option value="John.txt">John.txt</option>
+        <option value="rockyou.txt">rockyou.txt</option>
+      </select><br>
+
+      <!-- Additional options -->
+      <label for="cpu">CPU Limit (Optional) (e.g., '200m'):</label>
+      <input type="text" id="cpu" name="cpu" title="Specify the CPU limit (e.g., '200m') only if need. by default all cpu power will be used"><br>
+
+      <label for="memory">Memory Limit (Optional) (e.g., '0.5Gi'):</label>
+      <input type="text" id="memory" name="memory" title="Specify the memory limit (e.g., '0.5Gi') only if need. by default it will use only the needed memory amount "><br>
+
+      <label for="parallelism">Number of Machines available to apply Parallelism (Optional):</label>
+      <input type="number" id="parallelism" name="parallelism" title="Specify the number of parallelism (default: 2)" placeholder="2"><br>
+
+      <input type="submit" value="Crack Bcrypt" onclick="crackBcrypt(); return false;">
+    </form>
+
+    <div class="output" id="outputDiv"></div>
+  </div>
+
+  <script>
+    function crackBcrypt() {
+      // Clear the outputDiv
+      document.getElementById("outputDiv").innerHTML = "";
+
+      var formElement = document.getElementById("crackForm");
+      var formData = new FormData(formElement);
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            document.getElementById("outputDiv").innerHTML = "<pre>" + xhr.responseText + "</pre>";
+          } else {
+            document.getElementById("outputDiv").innerHTML = "Error: " + xhr.responseText;
+          }
+        }
+      };
+      xhr.open("POST", "/crack_bcrypt");
+      xhr.send(formData);
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
